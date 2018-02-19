@@ -1,0 +1,36 @@
+/**
+
+ */
+
+// chan.jsn
+{
+    chan: <10> object,
+    send: (ch : <>obj) :< >string {
+        c[] = ch[];
+        c[] = null;
+    },
+    main: () {
+
+        chan[] = null;
+
+        x[] = chan[];
+
+        a, b[], c[key], d[index] = chan[]
+
+       then = () {}
+
+       else = () {}
+
+        bool[][] = a <= b;
+
+        {
+            then()
+            else()
+        }
+
+        {
+        a: x,
+        b: y
+        }
+    }
+}

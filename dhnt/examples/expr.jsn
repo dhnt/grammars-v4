@@ -1,0 +1,66 @@
+{
+    // types are inferred by the value
+    // declare our primitive types
+    string: "",
+    integer: 0,
+    float: 0.0,
+    object: {},
+    array: [],
+    true: 1b,
+    false: 0b,
+    null: 0a,
+
+    blank: 0a,
+
+    //byte: '',
+    //regex: ``,
+
+    //operations
+    increment1: (i += 1),
+    plus: (x:int , i:int) { x+i },
+    decrement: (j -= 1),
+    minus: (a:float , j:float) {x - j} ,
+    division: (n:number, d:number) { ( d != 0 ) # { (n / d), null} },
+
+    import: (url:string) { @url },
+    sizeof: (x:_) { <<- ($#x)},
+    typeof: (x:_) { <<- ?x},
+
+    channel: <>,
+
+    function: () {
+            chan = <>
+
+            arr = [a,b,c]
+
+            obj = {a: x, b: y}
+
+            arr2 = arr
+            a,b, _ = arr[]
+            arr = arr[n]
+            ch = chan []
+
+            arr[] = z
+            arr[n] = 0
+            arr[j][k][l] = zz
+            arr.j.k.l = zz
+            chan[] = zzz
+
+            receive = () {
+                v = channel [];
+                io.printf(ok);
+            }
+
+            receive(a,b,c);
+
+            a *= b
+            a ?< c
+            a ?= string
+
+            print(done)
+
+            //pipeline
+            array # (v) {} # (k,v) {} # { print() }
+    }
+
+}

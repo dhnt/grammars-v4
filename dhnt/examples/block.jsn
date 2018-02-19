@@ -1,0 +1,57 @@
+//block.jsn
+{
+
+   "infinite": (_ # {}),
+   "nested-blank": () {
+        {
+            {}
+        }
+        {}
+    },
+    //strictly to the letter
+    "faithful": () {
+        str = "string";
+        num = 1234.1234;
+        i += 1;
+
+        obj = {
+            x: a,
+            y: b
+        };
+
+        arr = [a, b, c];
+
+        bool = true;
+        bool = false;
+
+        nil = null;
+
+        (if) # {
+           true: then,
+           false: else
+        };
+    },
+    //no semi colon terminator
+    "liberal": () {
+        str = "string"
+        num = 1234.1234
+        i += 1
+
+        obj = {
+            x: a,
+            y: b
+        }
+
+        arr = [a, b, c]
+
+        bool = true
+        bool = false
+
+        nil = null
+
+        (if) # {
+            then,
+            else
+        }
+    }
+}

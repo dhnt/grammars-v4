@@ -1,0 +1,6 @@
+/*
+  Taken from https://tools.ietf.org/html/rfc8259
+*/
+//boolean.json
+//small JSON texts containing only values
+true

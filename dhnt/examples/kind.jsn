@@ -1,0 +1,29 @@
+/**
+
+ */
+
+// kind.jsn
+{
+    object: {x: a},
+    obj: object,
+    array: [int, int],
+    arr: array,
+    func: () {},
+    ch: < 9 > {y: a},
+    main: () {
+
+       func = (x) {}
+
+       ch = <0> "http://localhost"
+
+       (a < b && x >y) # {x, y}
+
+       ch1[][] = ch[]
+
+       object.x = a
+       array[0] = 10
+
+       obj[x], arr[2], ch[] = func(a), ch[][], obj[y], arr[x];
+
+    }
+}

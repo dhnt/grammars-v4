@@ -1,0 +1,173 @@
+
+/*
+ This is a minimalist program to demonstrate major features of DHNT.
+
+ DHNT, a superset of JSON http://www.json.org/, is a general purpose programming language.
+ It has no keywords or reserved words.
+ Like JSON can represent four primitive types (strings, numbers, booleans, and null)
+ and two structured types (objects and arrays). JSON literals true, false, and null
+ are defaulted to the internal representation of their respective values (1b, 0b, 0a) in DHNT
+ but can be redefined.
+
+ */
+
+// mini.jsn
+{
+
+//
+// a name:value ordered pair aka tuple, separated by a colon, is the foundational data structure in DHNT
+// type is inferred from the initially assigned value to the name
+// and the name can be referenced as type in future declarations
+//
+
+//
+any: _,
+
+// basic types
+text: "",
+//byte: '',
+float: 0.0,
+integer: 0,
+number: 1230.123456789,  // integer/float -> number
+
+true: 1b,
+false: 0b,
+boolean: 0b, // true/false -> boolean
+
+// composite types
+object: { },
+array: [],
+channel: <100> object,
+
+function: (){},
+
+//type conversion
+type: (x) type {
+
+},
+
+null: 0a,
+
+// include the standard I/O lib so we can print to the console
+io: (@ "dhnt/io"),
+
+//unnamed initialization block
+_: (() {
+    c = a + b
+}()),
+
+//default entry point, code excution starts at main if not otherwise specified
+main: (args: text) {
+        //
+        //tilde ~ op defers execution until the function returns
+        //
+        defer = ~ () {
+            io.print(args);
+        }
+
+        ~ () {
+            io.print(args);
+        }()
+
+        deferred = defer(x)
+
+        defer(y)
+
+        // assign the basic types' values to object defined earlier with names a, b, c, ...
+        object = { a: text, b: byte, c: integer, d: float, e: number, f: true, g: false, h: boolean};
+
+        // define two functions for sending and receiving messages
+        send = (message : text) {
+            channel[] = message;
+            print(x)
+        }
+
+        receive = & () _:string, _:integer {
+            v = channel[];
+            io.printf(v);
+            <<- v, 0
+        }
+
+        // call receive function now
+        // pay attention the ampsand &
+        // we are running the receive function asynchronously
+
+        //
+        & receive(x)
+        async = & receive(x)
+
+        (async) # (_,v) {
+            "hello": io.print(v)
+        }
+
+        // sequence terminator ; is optional if the statement is on a line by itself
+        // so we omit them from now on
+
+        // range over the object and send the text to the channel
+
+        (object) # (k, v) { //repetition
+            io.printf("name: %v value: %v", name, value)
+
+            //
+            send(v)
+
+            // is the value a text?
+            (v ?= text) # {
+               true: io.print("true"),
+               false: io.print("false")
+            }
+
+            (v ?= text) # (k) {
+               a: io.print("true"),
+               b: io.print("false")
+            }
+
+            //switch on the name
+            (k) # (k,v) {
+                a: io.print(v),
+                b: io.print(v),
+                _: io.print(v) //print the others
+            }
+
+        }
+
+        //object inheritance
+        parent = object
+
+        //child = {} parent //new object of parent with fields zeroed.
+
+        //array as stack
+        array = [] "string" //type referred by string, may not be string
+        array = [][]object //new array of object
+        array[] = push;
+        pop = array[];
+        array = null //destroy
+
+        arr = array  //reference
+
+        //
+        ch = <>"string"
+        ch = <10>string
+
+        ;; ;
+
+        ch = <>object //new channel
+        ch[] = send
+        receive = ch[]
+        ch = null //close
+
+        ;;
+        ;
+
+        //
+        a=b+c
+        {}
+        { {} }
+        { {;} }
+
+        io.printf("This is the end!")
+
+        //
+        <<- 0
+    }
+}

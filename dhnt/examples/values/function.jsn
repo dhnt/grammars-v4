@@ -1,0 +1,9 @@
+/*
+*/
+//function.jsn
+
+(param, param : string) result : int, result : float {
+    a += 1
+    c = (b == true) # { float(b) }
+    <<- a, c
+}

@@ -1,0 +1,31 @@
+/*
+    Introducing DHNT - the simple spoken programming language ...
+
+    a speakable language for humans age 0 and up, IOT, and possibly ET
+    a programming language with zero keyword, reserved word, or future reserved word
+    and minialist concepts
+
+    DHNT extends JSON with the following concepts:
+
+    identifier
+    label
+    expression
+    function
+    channel
+*/
+// dhnt.jsn
+{
+identifier: "a subset of strings using only Latin lower case alphabet a-z",
+
+label: "identifier, string, or expression used to reference values",
+
+expression: "in addition to logical/relational, arithmetic, bitwise \n
+    exits (break, continue, goto, retun, exit) are considered expressions \n
+    and work like other operations",
+
+function: ("parameterized expression - a block of expressions that take array of parameter values and produce array" +
+    "of result values when applied with array of argument values"),
+
+channel: "?"
+
+}

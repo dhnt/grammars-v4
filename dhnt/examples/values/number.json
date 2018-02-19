@@ -1,0 +1,6 @@
+/*
+  Taken from https://tools.ietf.org/html/rfc8259
+*/
+//number.json
+//small JSON texts containing only values
+42

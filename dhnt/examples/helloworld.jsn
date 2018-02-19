@@ -1,0 +1,12 @@
+/**
+ Hello, World! in DHNT.
+ */
+
+// helloworld.jsn
+{
+    io: (@ "dhnt/io"),
+    main: () {
+        io.print("Hello, World!");
+        <<- 0;
+    }
+}

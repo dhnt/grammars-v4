@@ -1,0 +1,34 @@
+{
+    main: (args : []string) {
+       a *= b;
+       a, b = x, y
+       label: x = b;
+
+       //
+        y = a + b * c
+
+        y += 1
+        zz -= 1
+       ;;;
+
+       //
+
+        ->> label ;
+        <<- a, b
+        <- name
+        -> xxx
+
+       {
+        abc = xyz
+         {
+            a ?= b
+         }
+       }
+
+       ~ func
+       & func
+
+       @ "./range.jsn"
+
+    }
+}

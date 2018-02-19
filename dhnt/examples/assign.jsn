@@ -1,0 +1,18 @@
+/**
+
+ */
+
+// assign.jsn
+{
+    main: () {
+
+       x = b
+       x, y, z = a, b, c, d
+
+       x, y = a + b - c * d / f, a || b && !c
+       
+       async, defer = &func(x), ~func(x, y)
+
+
+    }
+}

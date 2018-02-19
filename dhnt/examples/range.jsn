@@ -1,0 +1,70 @@
+/*
+    range.jsn
+
+    flow control statements
+*/
+{
+    main: () {
+        //if then
+
+        (a > b) # {
+          a;
+        }
+
+        // if then else
+        (a > b) # {
+            a,
+            b
+        }
+
+        //ternary operation
+        max = (a, b) {(a >= b) # {a, b}}
+        min = ("a":_, "b":_) { <<- ($"a" <= $"b") # {$"a", $"b"}}
+
+        m = max(x, y)
+        m = min(1000, 0.12)
+
+        // or
+        (a < y) # {
+            true: a,
+            false: {
+                b;
+                c
+                d
+                }
+        }
+        (a != y) # {
+            a,
+            { b; c; d}
+        }
+
+        //switch case
+        (v) # (v) {
+            a: {
+                x
+            },
+            b: y,
+            c: z
+        }
+
+        //for
+        (list) # (k,v){
+            key = k;
+            value = v;
+        }
+
+        //while true
+        _ # {
+            a = 1;
+            x;
+            y
+        }
+
+        //functional labels
+        _ # (v) {
+            (f(v)) : {},
+            (g(v)) : {},
+            (v > x) : {}
+        }
+    }
+}

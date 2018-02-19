@@ -1,0 +1,21 @@
+/**
+    declare common types
+ */
+
+// lang.jsn
+{
+    string: "",
+    number: 0.0,
+    integer: 0 (:number),
+    float: 0.0 (:number),
+    object: {},
+    map: object,
+    channel: <>,
+    function: () {},
+    array: [],
+    stack: array,
+    boolean: 0b,
+    true: 1b (:boolean),
+    false: 0b (:boolean),
+    null: 0a
+}

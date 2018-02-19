@@ -1,0 +1,76 @@
+/**
+
+ */
+
+// func.jsn
+{
+    max: (x, y) {
+        <<- x > y # {x, y}
+    },
+    min: (x, y) {
+        (x < y) # {
+            true: x,
+            false: y
+         }
+    },
+    swap: (x, y) {
+        y, x = x, y
+    },
+    /*
+        find the index
+    */
+    find: (term :string, a: []string) :int {
+        a # (k, v) {
+            v == term # { <<- k }
+        }
+
+        <<- -1
+    },
+    sort: (a : []string) {
+        i = 0; j = 0;
+        _# {
+            _ # {
+               j+=1 >= $#a # {<-}
+
+                a[i] > a[j] # {
+                   a[i], a[j] = a[j], a[i]
+                }
+            }
+
+            i += 1 > $#a # <<-
+        }
+    },
+    /*
+        log before and after the call
+    */
+    around: (f : (:string):int{}) :(:string):int{} {
+        <<- (x :string) :int {
+            log(x)
+
+            result = f(x)
+
+            log(result)
+            <<- result
+        }
+    },
+    main: () {
+
+       x = min(100, a)
+       y = max(100.10, b)
+
+       y, x = swap(x, y)
+
+       func = (a :string) :int {
+            <<- $#a;
+       }
+
+       f = around(func)
+
+       i = f("hello")
+
+        print(i)
+
+        list = [a, b, 1, 2]
+        sort(list)
+    }
+}
