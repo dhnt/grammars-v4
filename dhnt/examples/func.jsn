@@ -43,7 +43,9 @@
     /*
         log before and after the call
     */
-    around: (f : (:string):int{}) :(:string):int{} {
+    //intentionally leaving out spaces for testing
+    //around: ( f: (:string) :int {} ) :(:string) :int {}
+    around:(f:(:string):int{}):(:string):int{}{
         <<- (x :string) :int {
             log(x)
 

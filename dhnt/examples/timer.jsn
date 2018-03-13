@@ -1,0 +1,45 @@
+/**
+ */
+
+// timer.jsn
+{
+    int: 0,
+    epoch: 0,
+    string: "",
+
+    // time in seconds
+    second: (second: int) :epoch {
+        <<- second * 1000;
+    },
+    // time in minutes
+    minute: (minute: int) :epoch {
+        <<- minute * 60 * 1000;
+    },
+    // time per Unix crontab
+    crontab: (schedule: string) :[] epoch {
+        //todo
+    },
+    func: () {
+        handler = (time) {
+            print("time: %v", time);
+        }
+
+        // every 5 second
+        #) (second(5)) (t) {
+            handler(t);
+        }
+
+        // once in 5 minute
+        #) (minute(5)) (c, t) {
+            handler(t)
+            <<-;
+        }
+
+        // five minutes after midnight, every day
+        scheduler = #) (crontab("5 0 * * *"));
+
+        scheduler((count, epoch) {
+            printf("times : %v date: %v", count, date(epoch))
+        })
+    }
+}

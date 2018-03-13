@@ -209,7 +209,10 @@ bufsize
 expression
     : binary                                        # BinaryOperation
     | '@' expression                                # IncludeExpression
-    | expression '#' kv? ( block | jump )     # RangeExpression
+    | ':-(' expression                               # PanicExpression
+    | ':-)' ( '(' IDENTIFIER? ')' )? block           # RecoverExpression
+    | '#)' expression ( kv? block )?                # TimerExpression
+    | expression '#' kv? ( block | jump )           # RangeExpression
     ;
 
 binary
@@ -289,19 +292,20 @@ ASSIGN_OP
     ;
 
 //
-
 LBRACE : '{';
 RBRACE : '}';
 LBRACK : '[';
 RBRACK : ']';
+
+COLON  : ':';
+COMMA  : ',';
+
 LPAREN : '(';
 RPAREN : ')';
 GT     : '>';
 LT     : '<';
-COLON  : ':';
-COMMA  : ',';
-SEMI   : ';';
 
+SEMI   : ';';
 DOT    : '.';
 //ELLIPSIS : '...';
 AT : '@';
@@ -353,13 +357,18 @@ SIZE_OF     : '$#';
 INSTANCE_OF : '?=';
 MEMBER_OF   : '?<';
 
-ELVIS       : '?:';
-
 RETURN   : '<<-';
 BREAK    : '<-';
 GOTO     : '->>';
 CONTINUE : '->';
 EXIT     : '<<<-';
+RESTART  : '->>>';
+
+ELVIS    : '?:';
+
+PANIC    : ':-(';
+RECOVER  : ':-)';
+TIMER    : '#)';
 
 //
 

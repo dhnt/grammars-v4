@@ -93,7 +93,7 @@ func ParseFile(ex string) (elapsed time.Duration, err error) {
 
 func main() {
 
-	_, err := ParseFile("jump.jsn")
+	_, err := ParseFile("func.jsn")
 
 	if err != nil {
 		os.Exit(1)

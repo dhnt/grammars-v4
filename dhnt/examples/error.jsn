@@ -1,0 +1,31 @@
+/**
+ */
+
+// error.jsn
+{
+    error: "",
+
+    handle: (v : error) {
+        print(v);
+    },
+    doit: () :error {
+        <<- "got error"
+    },
+
+    func: () {
+        // recover from error
+        :-) (v) {
+            v # (k,v) {
+                handle(v);
+            }
+        }
+
+        //
+        err = doit();
+
+        // panic with error
+        err != null # {
+            :-( err;
+        }
+    }
+}

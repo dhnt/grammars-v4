@@ -85,6 +85,14 @@ func TestDhnt(t *testing.T) {
 	}
 }
 
+func TestError(t *testing.T) {
+	_, err := ParseFile("error.jsn")
+
+	if err != nil {
+		t.Errorf("%v", err)
+	}
+}
+
 func TestExpr(t *testing.T) {
 	_, err := ParseFile("expr.jsn")
 
@@ -151,6 +159,14 @@ func TestRange(t *testing.T) {
 
 func TestStmt(t *testing.T) {
 	_, err := ParseFile("stmt.jsn")
+
+	if err != nil {
+		t.Errorf("%v", err)
+	}
+}
+
+func TestTimer(t *testing.T) {
+	_, err := ParseFile("timer.jsn")
 
 	if err != nil {
 		t.Errorf("%v", err)
