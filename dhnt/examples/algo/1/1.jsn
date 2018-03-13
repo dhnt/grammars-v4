@@ -1,0 +1,22 @@
+/**
+*/
+//
+{
+    string: "",
+    true: 1b (:boolean),
+    false: 0b (:boolean),
+
+    unique: (s :string) :boolean {
+        map = {}
+        s # (i, char) {
+            char ?< map # <<- false;
+            map[char] = char;
+        }
+        <<- true;
+    },
+    main: (args: []string) {
+       args ?: "abccd" # (i, v) {
+           print(i, ":", unique(v));
+       }
+    }
+}

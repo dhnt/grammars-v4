@@ -1,0 +1,72 @@
+/**
+*/
+//
+{
+    string: "",
+    true: 1b (:boolean),
+    false: 0b (:boolean),
+
+    sort: (s :string) :[] {
+        a = s (:[])
+        i, j = 0, 0;
+        _ # {
+            i += 1 >= $#a # <-
+            _ # {
+                j += 1 >= $#a # <-
+                //swap
+                a[i] < a[j] # {
+                    a[i], a[j] = a[j], a[i]
+                }
+            }
+        }
+        <<- a
+    },
+
+    // sort and compare
+    checkperm: (a :[], b :[]) :boolean {
+        $#a != $#b # <<- false;
+
+        b = sort(b);
+
+        sort[a] # (i, v) {
+            v != b[i] # <<- false
+        }
+
+        <<- true
+    },
+
+    // use map
+    checkperm2: (a :[], b :[]) :boolean {
+        $#a != $#b # <<- false;
+
+        map = {}
+        a # (v) {
+            map[v] #  (count) {
+                (count > 0) : {
+                    map[v] += 1 ;
+                },
+                {
+                    map[v] = 1;
+                }
+            }
+        }
+
+        b # (v) {
+            map[v] == null # <<- false;
+            map[v] -= 1 < 0 # <<- false
+        }
+
+        <<- true
+    },
+    assert: (a, b) {
+        a != b # { :-( "failed" }
+    },
+    main: () {
+        a = "abcd"; b = "badc";
+        assert(checkperm(a,b), true)
+        assert(checkperm2(b,a), true)
+
+        assert(checkperm("abc", "bcd"), false)
+        assert(checkperm2("abc", "bcd"), false)
+    }
+}
