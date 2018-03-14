@@ -26,10 +26,10 @@
     sizeof: (x:_) { <<- ($#x)},
     typeof: (x:_) { <<- ?x},
 
-    channel: <>,
+    channel: <> string,
 
     function: () {
-            chan = <>
+            chan := <1>int
 
             arr = [a,b,c]
 

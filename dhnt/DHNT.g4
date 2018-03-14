@@ -108,23 +108,22 @@ script
 
 object
     : '{' pair (',' pair)* '}'                        # ObjectMembers
-    | '{' '}' class                                   # ObjectClass
-    | '{' '}'                                         # ZeroObject
+    | '{' '}' kind                                    # ObjectKind
+    | '{' '}'                                         # ObjectZero
     ;
 
 array
     : '[' value ( ',' value )* ']'                    # ArrayElements
     | '[' ']' kind                                    # ArrayKind
-    | '[' ']'                                         # ZeroArray
+    | '[' ']'                                         # ArrayZero
     ;
 
 function
-    : '(' parameters? ')' results? block
+    : '(' parameters? ')' results? block?
     ;
 
 channel
-    : '<' bufsize '>' kind?              # BufferedChannel
-    | '<' '>' kind?                      # UnbufferedChannel
+    : '<' bufsize? '>' kind
     ;
 
 pair
@@ -132,8 +131,7 @@ pair
     ;
 
 name
-    : STRING
-    | IDENTIFIER
+    : STRING | IDENTIFIER
     ;
 
 value
@@ -141,16 +139,12 @@ value
     | '(' expression ')'       # ExpressionValue
     ;
 
-class
-    : name
-    ;
-
 kind
     : literal
     ;
 
 literal
-    : name
+    : STRING | IDENTIFIER
     | NUMBER
     | object | function | channel
     | array
@@ -168,8 +162,8 @@ results
     ;
 
 param
-    : name ( ':' kind )?                # ParamName
-    | ':' kind                          # ParamAnonymous
+    : name ( ':' kind )?                # NamedParam
+    | ':' kind                          # AnonymousParam
     ;
 
 arguments
@@ -184,7 +178,6 @@ statement
     : label ':' statement                         # LabeledStmt
     | expression                                  # ExpressionStmt
     | ';'                                         # EmptyStmt
-    | statement ( ',' statement )+                # ChoiceStmt
     | block                                       # NestedBlock
     | jump                                        # JumpStmt
     ;
@@ -209,10 +202,20 @@ bufsize
 expression
     : binary                                        # BinaryOperation
     | '@' expression                                # IncludeExpression
-    | ':-(' expression                               # PanicExpression
-    | ':-)' ( '(' IDENTIFIER? ')' )? block           # RecoverExpression
+    | ':-(' expression                              # PanicExpression
+    | ':-)' ( '(' IDENTIFIER? ')' )? block          # RecoverExpression
     | '#)' expression ( kv? block )?                # TimerExpression
-    | expression '#' kv? ( block | jump )           # RangeExpression
+    | expression '#' ranger                         # RangeExpression
+    ;
+
+ranger
+    :  kv? ( jump | controlflow )
+    ;
+
+controlflow
+    : '{' statement ',' statement '}'                                           # IfChoice
+    | '{' label ':' statement ( ',' label ':' statement )* (',' statement)? '}' # SwitchChoice
+    |  block                                                                    # Loop //or choice for logical expression
     ;
 
 binary
@@ -228,7 +231,6 @@ binary
     | binary '|' binary                             # BitOrExpression
     | binary '&&' binary                            # LogicalAndExpression
     | binary '||' binary                            # LogicalOrExpression
-    | binary '?:' binary                            # ElvisExpression
     ;
 
 unary
@@ -250,7 +252,7 @@ primary
     : operand                                                # OperandOperation
     | primary '[' expression? ']'                            # IndexExpression
     | primary '[' expression? ':' expression? ']'            # SliceExpression
-    | primary '.' expression                                 # DotExpression
+    | primary '.' name                                       # DotExpression
     | primary typeAssertion                                  # TypeAssertionExpression
     | primary '(' arguments? ')'                             # ArgumentsExpression
     | '?' primary                                            # TypeofExpression
@@ -258,6 +260,7 @@ primary
     | '$#' primary                                           # SizeofExpression
     | primary '?=' kind                                      # InstanceofExpression
     | primary '?<' primary                                   # MemberofExpression
+    | primary '?:' expression                                # ElvisExpression
     | primary (',' primary)* ASSIGN_OP arguments             # AssignmentExpression
     ;
 
@@ -287,7 +290,7 @@ eos
 //
 
 ASSIGN_OP
-    : '='
+    : '=' | ':='
     | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
     ;
 
@@ -352,6 +355,9 @@ ANDNOT_ASSIGN : '&^=';
 BANG     : '!';
 TILDE    : '~';
 QUESTION : '?';
+
+//
+COLON_ASSIGN : ':=';
 
 SIZE_OF     : '$#';
 INSTANCE_OF : '?=';

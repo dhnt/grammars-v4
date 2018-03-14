@@ -10,7 +10,7 @@
     float: 0.0 (:number),
     object: {},
     map: object,
-    channel: <>,
+    channel: <> string,
     function: () {},
     array: [],
     stack: array,

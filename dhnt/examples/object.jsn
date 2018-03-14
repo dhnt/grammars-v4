@@ -1,0 +1,29 @@
+/**
+*/
+
+//object.jsn
+{
+    string: "",
+    int: 0,
+    float: 0.0,
+    boolean: 0b,
+    object: {
+        id: string,
+        status: boolean
+    },
+    array: [] int,
+    true: 1b (:boolean),
+    false: 0b (:boolean),
+    channel: <1> float,
+    func: (obj :object) :int {
+        print(obj);
+    },
+    main: (args :[]string) {
+        obj := {} object
+        string = "hi"
+
+        int := 100
+
+        print(obj)
+    }
+}

@@ -90,12 +90,12 @@ func ParseFile(ex string) (elapsed time.Duration, err error) {
 
 	return
 }
-
-func main() {
-
-	_, err := ParseFile("func.jsn")
-
-	if err != nil {
-		os.Exit(1)
-	}
-}
+//
+//func main() {
+//
+//	_, err := ParseFile("func.jsn")
+//
+//	if err != nil {
+//		os.Exit(1)
+//	}
+//}

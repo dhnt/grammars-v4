@@ -149,6 +149,14 @@ func TestMini(t *testing.T) {
 	}
 }
 
+func TestObject(t *testing.T) {
+		_, err := ParseFile("object.jsn")
+
+		if err != nil {
+				t.Errorf("%v", err)
+		}
+}
+
 func TestRange(t *testing.T) {
 	_, err := ParseFile("range.jsn")
 

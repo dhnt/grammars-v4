@@ -7,8 +7,8 @@
     false: 0b (:boolean),
 
     unique: (s :string) :boolean {
-        map = {}
-        s # (i, char) {
+        map := {} string
+        s # (_, char) {
             char ?< map # <<- false;
             map[char] = char;
         }
