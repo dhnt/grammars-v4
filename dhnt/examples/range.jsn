@@ -1,20 +1,69 @@
 /*
     range.jsn
 
-    flow control statements
+    flow control operations
 */
 {
+    int: 0,
+    null: 0a,
+    boolean: 0b,
+    ranger: () :int, :_,
+
+    //custom range iterators
+    //
+    //iterate once
+    if: (b :boolean) :ranger {
+        done := 0b;
+
+        <<- () :int, :boolean {
+            done || !b # <<- null
+
+            done = 1b;
+
+            <<- 0, b;
+        }
+    },
+    //
+    for: (init :int, upper :int, step :int) :ranger {
+        i, v := init, init;
+
+        <<- () :int, :int {
+            i > upper # <<- null
+
+            i += 1;
+            v += step;
+            <<- i, v;
+        }
+    },
+    forever: () :ranger {
+        i := 0;
+        <<- () :int, :int {
+            i +=1;
+            <<- i, 0;
+        }
+    },
+
     main: () {
+        a, b := 1, 2;
+
         //if then
 
         (a > b) # {
-          a;
+          print(a);
+        }
+
+        if (a > b) # {
+            print(b);
         }
 
         // if then else
         (a > b) # {
-            a,
-            b
+            print(a),
+            print(b)
+        }
+
+        if (a > b) # {
+            print(a), print(b)
         }
 
         //ternary operation
@@ -39,7 +88,9 @@
         }
 
         //switch case
-        (v) # (v) {
+        arr := [a, b, c];
+
+        (arr) # (v) {
             a: {
                 x
             },
@@ -53,11 +104,19 @@
             value = v;
         }
 
+        for (0, 1000, 1) # (i,v) {
+
+        }
+
         //while true
         _ # {
             a = 1;
             x;
             y
+        }
+
+        forever # {
+
         }
 
         //functional labels

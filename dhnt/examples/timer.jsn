@@ -25,21 +25,21 @@
         }
 
         // every 5 second
-        #) (second(5)) (t) {
+        #) second(5) # (t) {
             handler(t);
         }
 
         // once in 5 minute
-        #) (minute(5)) (c, t) {
+        #) minute(5) # (c, t) {
             handler(t)
             <<-;
         }
 
         // five minutes after midnight, every day
-        scheduler = #) (crontab("5 0 * * *"));
+        scheduler = #) crontab("5 0 * * *");
 
-        scheduler((count, epoch) {
+        scheduler # (count, epoch) {
             printf("times : %v date: %v", count, date(epoch))
-        })
+        }
     }
 }

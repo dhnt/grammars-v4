@@ -1,0 +1,72 @@
+/**
+    alias operator (@ ... (: type))
+    where type is one of: golang, bash, json, or jsn
+    json/jsn is optional
+*/
+//alias.jsn
+{
+    //alias
+    //for control flow operations
+    //
+    break: (@ "<-"),
+    continue: (@ "->"),
+    return: (@ "<<-"),
+    goto: (@ "->>"),
+    retry: (@ "->>"),
+    exit: (@ "<<<-"),
+    restart: (@ "->>>"),
+
+    //for built-in operations
+    plus: (@ "+"),
+    minus: (@ "-"),
+
+    and: (@ "&&"),
+    or: (@ "||"),
+    not: (@ "!"),
+
+    defer: (@ "~"),
+    go: (@ "&"),
+
+    panic: (@ ":-("),
+    recover: (@ ":-)"),
+
+    range: (@ "#"),
+
+    sizeof: (@ "$#"),
+    memberof: (@ "?<"),
+    instanceof: (@ "?="),
+
+    //alias
+    //as constants
+    //
+    pi: (@ "3.14159265"),
+    dateformat: (@ "\"YYYY-MM-DD hh:mm:ss.sss\""),
+
+    //alias the alias operation
+    alias: (@ "@"),
+
+    //import
+    //packages in other languages
+    //
+    //golang
+    os: (@ "os" (:golang)), //standard golang library
+    gorrila: (@ "github.com/xxx.go" (:golang)), //third party library
+    pkg: (@ "go/example.com/my/module/pkg.go" (:golang)), //local library
+
+    //bash
+    sh: (@ "script.sh" (:bash)),
+
+    //include
+    //DHNT packages / modules
+    //type assertion (:jsn) or (:json) is optional
+    //
+    code: (@ "file/path/other.jsn"),
+    data: (@  "path/to/data/file" (:json)),
+    remote: (@ "https://github.com/org/path/other.jsn"(:jsn)),
+
+    main: () {
+        status, msg := sh.function(a, b, c)
+
+        os."Exit"(0)
+    }
+}

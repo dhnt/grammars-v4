@@ -53,6 +53,14 @@ func TestTestJson(t *testing.T) {
 }
 
 //dhnt
+func TestAlias(t *testing.T) {
+		_, err := ParseFile("alias.jsn")
+
+		if err != nil {
+				t.Errorf("%v", err)
+		}
+}
+
 func TestAssign(t *testing.T) {
 	_, err := ParseFile("assign.jsn")
 

@@ -193,6 +193,7 @@ jump
     | '->>' expression?                            # GotoOperation
     | '->' expression?                             # ContinueOperation
     | '<<<-' expression?                           # ExitOperation
+    | '->>>' expression?                           # RestartOperation
     ;
 
 bufsize
@@ -204,7 +205,7 @@ expression
     | '@' expression                                # IncludeExpression
     | ':-(' expression                              # PanicExpression
     | ':-)' ( '(' IDENTIFIER? ')' )? block          # RecoverExpression
-    | '#)' expression ( kv? block )?                # TimerExpression
+    | '#)' expression                               # TimerExpression
     | expression '#' ranger                         # RangeExpression
     ;
 

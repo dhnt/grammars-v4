@@ -3,10 +3,22 @@
 
 // jump.jsn
 {
+    //aliases
+    break: (@ "<-"),
+    continue: (@ "->"),
+    return: (@ "<<-"),
+    goto: (@ "->>"),
+
+    //
+    panic: (@ ":-("),
+    recover: (@ ":-)"),
+
     exit: (x) {
         <<<- x
     },
-
+    restart: () {
+        ->>>
+    },
     func: () {
         x > 0 # {<-,->}
 
@@ -14,8 +26,25 @@
             <<-,
             ->>
         }
+
+        y < 0 # {break, continue}
+        y < 0 # {
+            return (a, b, c),
+            goto
+        }
+
+        return (x, y)
     },
     main: () {
+       ~ () {
+            :-) (error) {
+                print(error)
+            }
+        }
+
+        :-( fmt.print("error")
+
+        1 # {restart()}
 
         exit(0)
     }
