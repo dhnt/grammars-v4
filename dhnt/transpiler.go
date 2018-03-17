@@ -81,56 +81,56 @@ func (s *CompilationListener) ExitObjectMembers(ctx *parser.ObjectMembersContext
 		fmt.Printf("}\n")
 		s.nested --
 }
-
-func (s *CompilationListener) EnterObjectKind(ctx *parser.ObjectKindContext) {}
-
-func (s *CompilationListener) ExitObjectKind(ctx *parser.ObjectKindContext) {}
-
-func (s *CompilationListener) EnterObjectZero(ctx *parser.ObjectZeroContext) {}
-
-func (s *CompilationListener) ExitObjectZero(ctx *parser.ObjectZeroContext) {}
-
-func (s *CompilationListener) EnterArrayElements(ctx *parser.ArrayElementsContext) {}
-
-func (s *CompilationListener) ExitArrayElements(ctx *parser.ArrayElementsContext) {}
-
-func (s *CompilationListener) EnterArrayKind(ctx *parser.ArrayKindContext) {}
-
-func (s *CompilationListener) ExitArrayKind(ctx *parser.ArrayKindContext) {}
-
-func (s *CompilationListener) EnterArrayZero(ctx *parser.ArrayZeroContext) {}
-
-func (s *CompilationListener) ExitArrayZero(ctx *parser.ArrayZeroContext) {}
-
-func (s *CompilationListener) EnterFunction(ctx *parser.FunctionContext) {}
-
-func (s *CompilationListener) ExitFunction(ctx *parser.FunctionContext) {}
-
-func (s *CompilationListener) EnterPair(ctx *parser.PairContext) {
-
-}
-
-func (s *CompilationListener) ExitPair(ctx *parser.PairContext) {
-
-		fmt.Printf("exit pair: %v\n", ctx.GetText())
-}
-
-func (s *CompilationListener) EnterName(ctx *parser.NameContext) {}
-
-func (s *CompilationListener) ExitName(ctx *parser.NameContext) {}
-
-func (s *CompilationListener) EnterLiteralValue(ctx *parser.LiteralValueContext) {}
-
-func (s *CompilationListener) ExitLiteralValue(ctx *parser.LiteralValueContext) {}
-
-func (s *CompilationListener) EnterExpressionValue(ctx *parser.ExpressionValueContext) {}
-
-func (s *CompilationListener) ExitExpressionValue(ctx *parser.ExpressionValueContext) {}
-
-func (s *CompilationListener) EnterKind(ctx *parser.KindContext) {}
-
-func (s *CompilationListener) ExitKind(ctx *parser.KindContext) {}
-
-func (s *CompilationListener) EnterLiteral(ctx *parser.LiteralContext) {}
-
-func (s *CompilationListener) ExitLiteral(ctx *parser.LiteralContext) {}
+//
+//func (s *CompilationListener) EnterObjectKind(ctx *parser.ObjectKindContext) {}
+//
+//func (s *CompilationListener) ExitObjectKind(ctx *parser.ObjectKindContext) {}
+//
+//func (s *CompilationListener) EnterObjectZero(ctx *parser.ObjectZeroContext) {}
+//
+//func (s *CompilationListener) ExitObjectZero(ctx *parser.ObjectZeroContext) {}
+//
+//func (s *CompilationListener) EnterArrayElements(ctx *parser.ArrayElementsContext) {}
+//
+//func (s *CompilationListener) ExitArrayElements(ctx *parser.ArrayElementsContext) {}
+//
+//func (s *CompilationListener) EnterArrayKind(ctx *parser.ArrayKindContext) {}
+//
+//func (s *CompilationListener) ExitArrayKind(ctx *parser.ArrayKindContext) {}
+//
+//func (s *CompilationListener) EnterArrayZero(ctx *parser.ArrayZeroContext) {}
+//
+//func (s *CompilationListener) ExitArrayZero(ctx *parser.ArrayZeroContext) {}
+//
+//func (s *CompilationListener) EnterFunction(ctx *parser.FunctionContext) {}
+//
+//func (s *CompilationListener) ExitFunction(ctx *parser.FunctionContext) {}
+//
+//func (s *CompilationListener) EnterPair(ctx *parser.PairContext) {
+//
+//}
+//
+//func (s *CompilationListener) ExitPair(ctx *parser.PairContext) {
+//
+//		fmt.Printf("exit pair: %v\n", ctx.GetText())
+//}
+//
+//func (s *CompilationListener) EnterName(ctx *parser.NameContext) {}
+//
+//func (s *CompilationListener) ExitName(ctx *parser.NameContext) {}
+//
+//func (s *CompilationListener) EnterLiteralValue(ctx *parser.LiteralValueContext) {}
+//
+//func (s *CompilationListener) ExitLiteralValue(ctx *parser.LiteralValueContext) {}
+//
+//func (s *CompilationListener) EnterExpressionValue(ctx *parser.ExpressionValueContext) {}
+//
+//func (s *CompilationListener) ExitExpressionValue(ctx *parser.ExpressionValueContext) {}
+//
+//func (s *CompilationListener) EnterKind(ctx *parser.KindContext) {}
+//
+//func (s *CompilationListener) ExitKind(ctx *parser.KindContext) {}
+//
+//func (s *CompilationListener) EnterLiteral(ctx *parser.LiteralContext) {}
+//
+//func (s *CompilationListener) ExitLiteral(ctx *parser.LiteralContext) {}

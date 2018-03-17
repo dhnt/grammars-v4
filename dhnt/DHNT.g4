@@ -107,50 +107,33 @@ script
     ;
 
 object
-    : '{' pair (',' pair)* '}'                        # ObjectMembers
+    : '{' members '}'                                 # ObjectMembers
     | '{' '}' kind                                    # ObjectKind
     | '{' '}'                                         # ObjectZero
     ;
 
 array
-    : '[' value ( ',' value )* ']'                    # ArrayElements
+    : '[' elements ']'                                # ArrayElements
     | '[' ']' kind                                    # ArrayKind
     | '[' ']'                                         # ArrayZero
     ;
 
-function
-    : '(' parameters? ')' results? block?
+relation
+    : '(' parameters? ')' results? block              # RelationParametric
+    | '(' arguments ')'                               # RelationArguments
+    | '(' ')'                                         # RelationZero
     ;
 
 channel
     : '<' bufsize? '>' kind
     ;
 
-pair
-    : name ':' value
+members
+    : pair (',' pair)*
     ;
 
-name
-    : STRING | IDENTIFIER
-    ;
-
-value
-    : literal typeAssertion?   # LiteralValue
-    | '(' expression ')'       # ExpressionValue
-    ;
-
-kind
-    : literal
-    ;
-
-literal
-    : STRING | IDENTIFIER
-    | NUMBER
-    | object | function | channel
-    | array
-    | TRUE
-    | FALSE
-    | NULL
+elements
+    : value ( ',' value )*
     ;
 
 parameters
@@ -161,25 +144,57 @@ results
     :  param ( ',' param )*
     ;
 
-param
-    : name ( ':' kind )?                # NamedParam
-    | ':' kind                          # AnonymousParam
-    ;
-
 arguments
      : expression (',' expression )*
      ;
 
+pair
+    : name ':' value
+    ;
+
+value
+    : literal ( '(' ':' kind ')' )?
+    ;
+
+param
+    : name ':' kind                # ParamNameKind
+    | ':' kind                     # ParamKindOnly
+    | name                         # ParamNameOnly
+    ;
+
+name
+    : STRING | IDENTIFIER
+    ;
+
+kind
+    : literal
+    ;
+
+literal
+    : STRING | IDENTIFIER
+    | NUMBER
+    | object | relation
+    | array | channel
+    | TRUE
+    | FALSE
+    | NULL
+    ;
+
 block
-    : '{' ( statement eos )* '}'
+    : '{' ( sequence )+ '}'                     # BlockSequence
+    | '{' '}'                                   # BlockEmpty
+    ;
+
+sequence
+    : (label ':')? statement eos
     ;
 
 statement
-    : label ':' statement                         # LabeledStmt
-    | expression                                  # ExpressionStmt
-    | ';'                                         # EmptyStmt
-    | block                                       # NestedBlock
+    : ';'                                         # EmptyStmt
     | jump                                        # JumpStmt
+    | exception                                   # ExceptionStmt
+    | expression                                  # ExpressionStmt
+    | block                                       # BlockNested
     ;
 
 label
@@ -196,17 +211,27 @@ jump
     | '->>>' expression?                           # RestartOperation
     ;
 
+exception
+    : ':-(' expression                              # PanicOperation
+    | ':-)' ( '(' IDENTIFIER? ')' )? block          # RecoverOperation
+    ;
+
 bufsize
     : expression
     ;
 
 expression
     : binary                                        # BinaryOperation
-    | '@' expression                                # IncludeExpression
-    | ':-(' expression                              # PanicExpression
-    | ':-)' ( '(' IDENTIFIER? ')' )? block          # RecoverExpression
+    | '@' importer                                  # ImportExpression
     | '#)' expression                               # TimerExpression
     | expression '#' ranger                         # RangeExpression
+    ;
+
+importer
+    : expression '(' ':' 'golang' ')'               # GolangSupport
+    | expression '(' ':' 'bash' ')'                 # BashSupport
+    | expression '(' ':' 'json' ')'                 # JsonSupport
+    | expression ( '(' ':' 'jsn' ')' )?             # Includeupport
     ;
 
 ranger
@@ -214,9 +239,9 @@ ranger
     ;
 
 controlflow
-    : '{' statement ',' statement '}'                                           # IfChoice
-    | '{' label ':' statement ( ',' label ':' statement )* (',' statement)? '}' # SwitchChoice
-    |  block                                                                    # Loop //or choice for logical expression
+    : '{' statement ( ',' statement )? '}'                                      # ChoiceIfThen
+    | '{' label ':' statement ( ',' label ':' statement )* (',' statement)? '}' # ChoiceSwitchCase
+    |  block                                                                    # Loop //or no choice
     ;
 
 binary
@@ -251,10 +276,9 @@ unary
 
 primary
     : operand                                                # OperandOperation
-    | primary '[' expression? ']'                            # IndexExpression
-    | primary '[' expression? ':' expression? ']'            # SliceExpression
-    | primary '.' name                                       # DotExpression
-    | primary typeAssertion                                  # TypeAssertionExpression
+    | primary ( '[' | '?[' ) expression? ']'                 # IndexExpression
+    | primary ( '[' | '?[' ) expression? ':' expression? ']' # SliceExpression
+    | primary ( '.' | '?.' )  name                           # DotExpression
     | primary '(' arguments? ')'                             # ArgumentsExpression
     | '?' primary                                            # TypeofExpression
     | '$' primary                                            # ValueofExpression
@@ -266,12 +290,7 @@ primary
     ;
 
 operand
-    : literal                # LiteralExpression
-    | '(' expression ')'     # ParenthesizedExpression
-    ;
-
-typeAssertion
-    : '(' ':' kind ')'
+    : literal
     ;
 
 kv
@@ -296,20 +315,20 @@ ASSIGN_OP
     ;
 
 //
-LBRACE : '{';
-RBRACE : '}';
-LBRACK : '[';
-RBRACK : ']';
+LBRACE  : '{';
+RBRACE  : '}';
+LSQUARE : '[';
+RSQAURE : ']';
+LPAREN  : '(';
+RPAREN  : ')';
+LANGLE  : '<';
+RANGLE  : '>';
 
-COLON  : ':';
-COMMA  : ',';
+COLON   : ':';
+COMMA   : ',';
+SEMI    : ';';
 
-LPAREN : '(';
-RPAREN : ')';
-GT     : '>';
-LT     : '<';
-
-SEMI   : ';';
+//
 DOT    : '.';
 //ELLIPSIS : '...';
 AT : '@';
@@ -359,6 +378,9 @@ QUESTION : '?';
 
 //
 COLON_ASSIGN : ':=';
+
+OPTION_DOT   : '?.';
+OPTION_INDEX : '?[';
 
 SIZE_OF     : '$#';
 INSTANCE_OF : '?=';
