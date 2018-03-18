@@ -54,11 +54,11 @@ func TestTestJson(t *testing.T) {
 
 //dhnt
 func TestAlias(t *testing.T) {
-		_, err := ParseFile("alias.jsn")
+	_, err := ParseFile("alias.jsn")
 
-		if err != nil {
-				t.Errorf("%v", err)
-		}
+	if err != nil {
+		t.Errorf("%v", err)
+	}
 }
 
 func TestAssign(t *testing.T) {
@@ -158,11 +158,11 @@ func TestMini(t *testing.T) {
 }
 
 func TestObject(t *testing.T) {
-		_, err := ParseFile("object.jsn")
+	_, err := ParseFile("object.jsn")
 
-		if err != nil {
-				t.Errorf("%v", err)
-		}
+	if err != nil {
+		t.Errorf("%v", err)
+	}
 }
 
 func TestRange(t *testing.T) {

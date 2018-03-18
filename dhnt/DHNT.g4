@@ -153,7 +153,12 @@ pair
     ;
 
 value
-    : literal ( '(' ':' kind ')' )?
+    : literal
+    | value typeAssertion
+    ;
+
+typeAssertion
+    : '(' parameters ')'
     ;
 
 param
@@ -222,6 +227,7 @@ bufsize
 
 expression
     : binary                                        # BinaryOperation
+    | expression typeAssertion                      # TypeAssertionExpression
     | '@' importer                                  # ImportExpression
     | '#)' expression                               # TimerExpression
     | expression '#' ranger                         # RangeExpression
@@ -327,6 +333,8 @@ RANGLE  : '>';
 COLON   : ':';
 COMMA   : ',';
 SEMI    : ';';
+
+COLONCOLON   : '::';
 
 //
 DOT    : '.';

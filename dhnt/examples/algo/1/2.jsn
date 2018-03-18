@@ -7,7 +7,7 @@
     false: 0b (:boolean),
 
     sort: (s :string) :[] {
-        a = s (:[])
+        a = s(:[])
         i, j = 0, 0;
         _ # {
             i += 1 >= $#a # <-

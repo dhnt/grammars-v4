@@ -1,23 +1,21 @@
 package main
 
 import (
-		"testing"
-		"os"
-		"fmt"
-		"path"
+	"testing"
+	"fmt"
 )
 
 func TestTranspile(t *testing.T) {
-		source := "object.jsn"
-		//
-		cwd, _ := os.Getwd()
-		file := path.Join(cwd, "/examples/", source)
+	source := "algo/1/2.jsn"
+	//
 
-		fmt.Println("Input: ", file)
 
-		_, err := Compile(file)
+	fmt.Println("Input: ", source)
 
-		if err != nil {
-				t.Errorf("%v", err)
-		}
+	//err := Compile(source)
+	_, err := ParseFile(source)
+
+	if err != nil {
+		t.Errorf("%v", err)
+	}
 }

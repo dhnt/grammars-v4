@@ -8,7 +8,7 @@
 
     unique: (s :string) :boolean {
         map := {} string
-        s # (_, char) {
+        (s) # (_, char) {
             char ?< map # <<- false;
             map[char] = char;
         }

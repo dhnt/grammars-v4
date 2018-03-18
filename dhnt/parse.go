@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"parser"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"time"
 	"os"
 	"path"
-	"time"
 )
 
 //
@@ -77,9 +77,9 @@ func Parse(file string) (elapsed time.Duration, err error) {
 	return
 }
 
-func ParseFile(ex string) (elapsed time.Duration, err error) {
+func ParseFile(source string) (elapsed time.Duration, err error) {
 	cwd, _ := os.Getwd()
-	file := path.Join(cwd, "/examples/", ex)
+	file := path.Join(cwd, "/examples/", source)
 
 	fmt.Println("Input: ", file)
 
