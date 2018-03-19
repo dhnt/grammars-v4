@@ -16,13 +16,13 @@
     //regex: ``,
 
     //operations
-    increment1: (i += 1),
+    //increment1: (i += 1),
     plus: (x:int , i:int) { x+i },
-    decrement: (j -= 1),
+   // decrement: (j -= 1),
     minus: (a:float , j:float) {x - j} ,
     division: (n:number, d:number) { ( d != 0 ) # { (n / d), null} },
 
-    import: (url:string) { @url },
+    //import: (url:string) { @url },
     sizeof: (x:_) { <<- ($#x)},
     typeof: (x:_) { <<- ?x},
 

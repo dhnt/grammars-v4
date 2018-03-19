@@ -62,7 +62,7 @@ func Parse(file string) (elapsed time.Duration, err error) {
 	p.AddErrorListener(NewErrorListener())
 
 	// Walk the tree
-	tree := p.Script()
+	tree := p.Value()
 
 	l := &myListener{}
 

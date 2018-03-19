@@ -84,6 +84,10 @@ func Compile(source string) error {
 
 	buildObject(namespace, tree)
 
+	buildType(namespace, tree)
+
+	//buildObject(namespace, tree)
+
 	return nil
 }
 
@@ -97,6 +101,22 @@ func buildObject(namespace string, tree antlr.Tree) {
 	if len(l.errors) > 0 {
 		fmt.Printf("Errors: %v", l.errors)
 	}
+
+	end := time.Now()
+	elapsed := end.Sub(start)
+	fmt.Printf("Time to build: %v\n\n", elapsed)
+}
+
+func buildType(namespace string, tree antlr.Tree) {
+	start := time.Now()
+
+	l := NewTypeListener(namespace)
+
+	antlr.ParseTreeWalkerDefault.Walk(l, tree)
+
+	//if len(l.errors) > 0 {
+	//	fmt.Printf("Errors: %v", l.errors)
+	//}
 
 	end := time.Now()
 	elapsed := end.Sub(start)

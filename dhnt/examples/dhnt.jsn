@@ -23,9 +23,9 @@ expression: "in addition to logical/relational, arithmetic, bitwise \n
     exits (break, continue, goto, retun, exit) are considered expressions \n
     and work like other operations",
 
-function: ("parameterized expression - a block of expressions that take array of parameter values and produce array" +
+/*function: ("parameterized expression - a block of expressions that take array of parameter values and produce array" +
     "of result values when applied with array of argument values"),
-
+*/
 channel: "?"
 
 }

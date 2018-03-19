@@ -6,8 +6,8 @@
 {
     string: "",
     number: 0.0,
-    integer: 0 (:number),
-    float: 0.0 (:number),
+    integer: 0,
+    float: 0.0,
     object: {},
     map: object,
     channel: <> string,
@@ -15,7 +15,7 @@
     array: [],
     stack: array,
     boolean: 0b,
-    true: 1b (:boolean),
-    false: 0b (:boolean),
+    true: 1b,
+    false: 0b,
     null: 0a
 }

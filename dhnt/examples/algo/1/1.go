@@ -6,15 +6,25 @@ import (
 )
 
 //string: ""
-type _string = string
-type _boolean = bool
-type _true = _boolean
-type _false = _boolean
+type _string  string
+type _boolean  bool
+type _true  _boolean
+type _false  _boolean
+
+type _func func(string, int) (int)
+
 
 type _1 struct {
 		_string _string
 		_true   _boolean
 		_false  _boolean
+		_struct struct {
+			x string
+			b int
+				sss struct {
+					a bool
+				    }
+			}
 }
 
 func (r *_1) _unique(_s _string) _boolean {

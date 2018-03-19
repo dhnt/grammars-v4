@@ -6,14 +6,13 @@ import (
 )
 
 func TestTranspile(t *testing.T) {
-	source := "algo/1/2.jsn"
+	source := "object.jsn"
 	//
-
 
 	fmt.Println("Input: ", source)
 
-	//err := Compile(source)
-	_, err := ParseFile(source)
+	err := Compile(source)
+	//_, err := ParseFile(source)
 
 	if err != nil {
 		t.Errorf("%v", err)

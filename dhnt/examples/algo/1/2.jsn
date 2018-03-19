@@ -3,11 +3,11 @@
 //
 {
     string: "",
-    true: 1b (:boolean),
-    false: 0b (:boolean),
+    true: 1b ,
+    false: 0b ,
 
     sort: (s :string) :[] {
-        a = s(:[])
+       // a = s(:[])
         i, j = 0, 0;
         _ # {
             i += 1 >= $#a # <-

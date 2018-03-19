@@ -103,49 +103,46 @@ grammar DHNT;
 */
 
 script
-    : value
+    : object
     ;
 
 object
     : '{' members '}'                                 # ObjectMembers
-    | '{' '}' kind                                    # ObjectKind
-    | '{' '}'                                         # ObjectZero
+    | '{' '}' kind?                                   # ObjectKind
     ;
 
 array
-    : '[' elements ']'                                # ArrayElements
-    | '[' ']' kind                                    # ArrayKind
-    | '[' ']'                                         # ArrayZero
+    : '[' elements ']'                                 # ArrayElements
+    | '[' ']' kind?                                    # ArrayKind
     ;
 
 relation
-    : '(' parameters? ')' results? block              # RelationParametric
-    | '(' arguments ')'                               # RelationArguments
-    | '(' ')'                                         # RelationZero
+    : '(' parameters? ')' results? block               # RelationParameters
+    | '(' '@' expression ')'                           # RelationAlias
     ;
 
 channel
-    : '<' bufsize? '>' kind
+    : '<' bufsize? '>' kind?
     ;
 
 members
-    : pair (',' pair)*
+    : pair (',' pair)* ','?
     ;
 
 elements
-    : value ( ',' value )*
+    : value ( ',' value )* ','?
     ;
 
 parameters
-    :  param ( ',' param )*
+    :  param ( ',' param )* ','?
     ;
 
 results
-    :  param ( ',' param )*
+    :  result ( ',' result )* ','?
     ;
 
 arguments
-     : expression (',' expression )*
+     : expression (',' expression )* ','?
      ;
 
 pair
@@ -154,21 +151,20 @@ pair
 
 value
     : literal
-    | value typeAssertion
-    ;
-
-typeAssertion
-    : '(' parameters ')'
     ;
 
 param
-    : name ':' kind                # ParamNameKind
-    | ':' kind                     # ParamKindOnly
-    | name                         # ParamNameOnly
+    : name? ':' kind             # ParamKind
+    | name                       # ParamName
+    ;
+
+result
+    : name? ':' kind
     ;
 
 name
-    : STRING | IDENTIFIER
+    : STRING
+    | IDENTIFIER
     ;
 
 kind
@@ -176,30 +172,33 @@ kind
     ;
 
 literal
-    : STRING | IDENTIFIER
-    | NUMBER
-    | object | relation
-    | array | channel
-    | TRUE
-    | FALSE
-    | NULL
+    : STRING        # StringLiteral
+    | IDENTIFIER    # IdentifierLiteral
+    | NUMBER        # NumberLiteral
+    | object        # ObjectLiteral
+    | relation      # RelationLiteral
+    | array         # ArrayLiteral
+    | channel       # ChannelLiteral
+    | TRUE          # BooleanLiteral
+    | FALSE         # BooleanLiteral
+    | NULL          # NullLiteral
     ;
 
 block
-    : '{' ( sequence )+ '}'                     # BlockSequence
-    | '{' '}'                                   # BlockEmpty
+    : '{' sequences '}'                     # BlockSequence
+    | '{' '}'                               # BlockEmpty
     ;
 
-sequence
-    : (label ':')? statement eos
+sequences
+    : statement ( eos statement )* eos
     ;
 
 statement
-    : ';'                                         # EmptyStmt
-    | jump                                        # JumpStmt
-    | exception                                   # ExceptionStmt
+    : name ':' statement                          # NameStmt
     | expression                                  # ExpressionStmt
-    | block                                       # BlockNested
+    | jump                                        # JumpStmt
+    | block                                       # BlockStmt
+    | ';'                                         # EmptyStmt
     ;
 
 label
@@ -208,16 +207,13 @@ label
     ;
 
 jump
-    : '<<-' arguments?                             # ReturnOperation
-    | '<-' expression?                             # BreakOperation
-    | '->>' expression?                            # GotoOperation
-    | '->' expression?                             # ContinueOperation
-    | '<<<-' expression?                           # ExitOperation
-    | '->>>' expression?                           # RestartOperation
-    ;
-
-exception
-    : ':-(' expression                              # PanicOperation
+    : '<<-' arguments?                       # ReturnOperation
+    | '<-' name?                             # BreakOperation
+    | '->>' name?                            # GotoOperation
+    | '->' name?                             # ContinueOperation
+    | '<<<-' expression?                     # ExitOperation
+    | '->>>' arguments?                      # RestartOperation
+    | ':-(' expression                              # PanicOperation
     | ':-)' ( '(' IDENTIFIER? ')' )? block          # RecoverOperation
     ;
 
@@ -227,17 +223,8 @@ bufsize
 
 expression
     : binary                                        # BinaryOperation
-    | expression typeAssertion                      # TypeAssertionExpression
-    | '@' importer                                  # ImportExpression
     | '#)' expression                               # TimerExpression
     | expression '#' ranger                         # RangeExpression
-    ;
-
-importer
-    : expression '(' ':' 'golang' ')'               # GolangSupport
-    | expression '(' ':' 'bash' ')'                 # BashSupport
-    | expression '(' ':' 'json' ')'                 # JsonSupport
-    | expression ( '(' ':' 'jsn' ')' )?             # Includeupport
     ;
 
 ranger
@@ -251,18 +238,18 @@ controlflow
     ;
 
 binary
-    : unary                                         # UnaryOperation
-    | binary ( '*' | '/' | '%' ) binary             # MultiplicativeExpression
-    | binary ( '+' | '-' ) binary                   # AdditiveExpression
-    | binary ( '<<' | '>>' ) binary                 # BitShiftExpression
-    | binary ( '<' | '>' | '<=' | '>=' ) binary     # RelationalExpression
-    | binary ( '==' | '!=' ) binary                 # EqualityExpression
-    | binary '&' binary                             # BitAndExpression
-    | binary '&^' binary                            # BinaryExpression
-    | binary '^' binary                             # BitXOrExpression
-    | binary '|' binary                             # BitOrExpression
-    | binary '&&' binary                            # LogicalAndExpression
-    | binary '||' binary                            # LogicalOrExpression
+    : unary                                          # UnaryOperation
+    | binary op=( '*' | '/' | '%' ) binary             # MultiplicativeExpression
+    | binary op=( '+' | '-' ) binary                   # AdditiveExpression
+    | binary op=( '<<' | '>>' ) binary                 # BitShiftExpression
+    | binary op=( '<' | '>' | '<=' | '>=' ) binary     # RelationalExpression
+    | binary op=( '==' | '!=' ) binary                 # EqualityExpression
+    | binary op='&' binary                             # BitAndExpression
+    | binary op='&^' binary                            # BinaryExpression
+    | binary op='^' binary                             # BitXOrExpression
+    | binary op='|' binary                             # BitOrExpression
+    | binary op='&&' binary                            # LogicalAndExpression
+    | binary op='||' binary                            # LogicalOrExpression
     ;
 
 unary
@@ -292,11 +279,12 @@ primary
     | primary '?=' kind                                      # InstanceofExpression
     | primary '?<' primary                                   # MemberofExpression
     | primary '?:' expression                                # ElvisExpression
-    | primary (',' primary)* ASSIGN_OP arguments             # AssignmentExpression
+    | primary (',' primary)* op=ASSIGN_OP arguments             # AssignmentExpression
     ;
 
 operand
     : literal
+    | '(' expression ')'
     ;
 
 kv

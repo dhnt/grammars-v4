@@ -3,8 +3,8 @@
 //
 {
     string: "",
-    true: 1b (:boolean),
-    false: 0b (:boolean),
+    true: 1b ,
+    false: 0b ,
 
     unique: (s :string) :boolean {
         map := {} string

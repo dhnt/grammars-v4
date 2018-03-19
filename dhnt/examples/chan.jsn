@@ -15,17 +15,17 @@
 
         x[] = chan[];
 
-        a, b[], c[key], d[index] = chan[]
+        a, b[], c[key], d[index] = chan[] ;
 
-       then = () {}
+        then = () {}
 
-       else = () {}
+        else = () {}
 
         bool[][] = a <= b;
 
         {
-            then()
-            else()
+            then();
+            else();
         }
 
         {

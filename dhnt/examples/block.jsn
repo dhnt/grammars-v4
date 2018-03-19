@@ -1,7 +1,7 @@
 //block.jsn
 {
 
-   "infinite": (_ # {}),
+   //"infinite": (_ # {}),
    "nested-blank": () {
         {
             {}

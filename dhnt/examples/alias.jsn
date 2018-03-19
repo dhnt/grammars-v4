@@ -49,20 +49,20 @@
     //packages in other languages
     //
     //golang
-    os: (@ "os" (:golang)), //standard golang library
-    gorrila: (@ "github.com/xxx.go" (:golang)), //third party library
-    pkg: (@ "go/example.com/my/module/pkg.go" (:golang)), //local library
+    // os: (@ "os" (:golang)), //standard golang library
+    //gorrila: (@ "github.com/xxx.go" (:golang)), //third party library
+    //pkg: (@ "go/example.com/my/module/pkg.go" (:golang)), //local library
 
     //bash
-    sh: (@ "script.sh" (:bash)),
+    //sh: (@ "script.sh" (:bash)),
 
     //include
     //DHNT packages / modules
     //type assertion (:jsn) or (:json) is optional
     //
     code: (@ "file/path/other.jsn"),
-    data: (@  "path/to/data/file" (:json)),
-    remote: (@ "https://github.com/org/path/other.jsn"(:jsn)),
+   // data: (@  "path/to/data/file" (:json)),
+    //remote: (@ "https://github.com/org/path/other.jsn"(:jsn)),
 
     main: () {
         status, msg := sh.function(a, b, c)

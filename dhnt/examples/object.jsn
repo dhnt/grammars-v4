@@ -5,25 +5,35 @@
 {
     string: "",
     int: 0,
+    "negative int": -0,
     float: 0.0,
-    boolean: 0b,
+    "negative float": -0.0,
+    "int exp": 0e1,
+    "int frac exp": 0.1e2,
     object: {
         id: string,
-        status: boolean
+        status: boolean,
+        nested: {
+            bool: true,
+            float: 0.0,
+        }
     },
-    array: [] int,
-    true: 1b (:boolean),
-    false: 0b (:boolean),
-    channel: <1> float,
-    func: (obj :object) :int {
+    /*array: [] int, */
+    /* channel: <1> float, */
+    boolean: 0b,
+    "boolean": 1b,
+    true: 1b,
+    false: 0b,
+    null: 0a,
+    func: (param1 :string, param2 :int) result:int {
         print(obj);
     },
-    main: (args :[]string) {
+   /* main: (args :[]string) {
         obj := {} object
         string = "hi"
 
         int := 100
 
         print(obj)
-    }
+    }*/
 }

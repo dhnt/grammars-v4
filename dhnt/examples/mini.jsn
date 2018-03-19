@@ -42,7 +42,7 @@ channel: <100> object,
 function: (){},
 
 //type conversion
-type: (x) type {
+type: (x) :type {
 
 },
 
@@ -52,9 +52,11 @@ null: 0a,
 io: (@ "dhnt/io"),
 
 //unnamed initialization block
+/*
 _: (() {
     c = a + b
 }()),
+*/
 
 //default entry point, code excution starts at main if not otherwise specified
 main: (args: text) {
@@ -82,7 +84,7 @@ main: (args: text) {
             print(x)
         }
 
-        receive = & () _:string, _:integer {
+        receive = & () :string, :integer {
             v = channel[];
             io.printf(v);
             <<- v, 0
@@ -126,7 +128,7 @@ main: (args: text) {
             (k) # (k,v) {
                 a: io.print(v),
                 b: io.print(v),
-                _: io.print(v) //print the others
+                io.print(v) //print the others
             }
 
         }
