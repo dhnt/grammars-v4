@@ -9,7 +9,7 @@
     array: [int, int],
     arr: array,
     func: () {},
-    ch: < 9 > {y: a},
+    ch: < 9 > obj,
     main: () {
 
        func = (x) {}

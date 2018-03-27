@@ -7,7 +7,7 @@
     int: 0,
     null: 0a,
     boolean: 0b,
-    ranger: () :int, :_,
+    ranger: () :int, :_ {},
 
     //custom range iterators
     //

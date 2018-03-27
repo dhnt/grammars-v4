@@ -168,7 +168,11 @@ name
     ;
 
 kind
-    : literal
+    : name
+    | '{' '}' kind?
+    | '[' ']' kind?
+    | '<' '>' kind?
+    | '(' parameters? ')' results? '{' '}'
     ;
 
 literal
