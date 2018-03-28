@@ -2,238 +2,235 @@ package main
 
 import (
 	"parser"
-	"path"
 	"fmt"
 	"strconv"
 	"strings"
 )
 
+/**
+	struct declaration
+*/
 type ObjectListener struct {
 	*parser.BaseDHNTListener
+
+	file     *TargetFile
 
 	errors   []string
 
 	script   string
 
-	array    bool
-	channel  bool
+	name     string
+	tval     string
+	text     string
+
+	nested   int
+
 	relation bool
-
-	nested  int
 }
 
-func (s *ObjectListener) build(str string) {
-	if s.nested > 1 {
+func NewObjectListener(file *TargetFile, name string) *ObjectListener {
+
+	return &ObjectListener{file: file, script: name}
+}
+
+func (r *ObjectListener) print() {
+	if r.nested > 1 {
 		return
 	}
-	//
-	if s.relation {
+
+	if r.relation {
 		return
 	}
-	fmt.Print(str)
+	s := fmt.Sprintf("%v  %v \t\t/* %v : %v */\n", encodeName(r.name), r.tval, r.name, r.text)
+
+	r.file.write(s)
 }
 
-func (s *ObjectListener) EnterScript(ctx *parser.ScriptContext) {
-	s.build(fmt.Sprintf("type %v /* %v */ {\n", encodeName(s.script), s.script))
+func (r *ObjectListener) EnterScript(ctx *parser.ScriptContext) {
+	s := fmt.Sprintf("type %v /* %v */ struct {\n", encodeName(r.script), r.script)
+	r.file.write(s)
 }
 
-func (s *ObjectListener) ExitScript(ctx *parser.ScriptContext) {
-	s.build("\n}\n")
+func (r *ObjectListener) ExitScript(ctx *parser.ScriptContext) {
+	r.file.write("\n}\n")
 }
 
-func (s *ObjectListener) EnterObjectMembers(ctx *parser.ObjectMembersContext) {
-	s.nested ++
+func (r *ObjectListener) EnterObjectMembers(ctx *parser.ObjectMembersContext) {
+	r.nested ++
 }
 
-func (s *ObjectListener) ExitObjectMembers(ctx *parser.ObjectMembersContext) {
-	s.nested --
+func (r *ObjectListener) ExitObjectMembers(ctx *parser.ObjectMembersContext) {
+	r.nested --
 }
 
-func (s *ObjectListener) EnterPair(ctx *parser.PairContext) {}
-
-func (s *ObjectListener) ExitPair(ctx *parser.PairContext) {}
-
-
-func (s *ObjectListener) EnterName(ctx *parser.NameContext) {
-	s.build(fmt.Sprintf("%v  ", encodeName(ctx.GetText())))
+func (r *ObjectListener) EnterName(ctx *parser.NameContext) {
+	r.name = ctx.GetText()
 }
 
-func (s *ObjectListener) EnterStringLiteral(ctx *parser.StringLiteralContext) {
-	s.build(fmt.Sprintf("string\n"))
+func (r *ObjectListener) EnterStringLiteral(ctx *parser.StringLiteralContext) {
+	r.text = ctx.GetText()
+	r.tval = "string"
+	r.print()
 }
 
-func (s *ObjectListener) EnterIdLiteral(ctx *parser.IdentifierLiteralContext) {
-	s.build(fmt.Sprintf("id\n"))
+func (r *ObjectListener) EnterIdentifierLiteral(ctx *parser.IdentifierLiteralContext) {
+	r.text = ctx.GetText()
+	r.tval = encodeName(ctx.GetText())
+	r.print()
 }
 
-func (s *ObjectListener) EnterNumberLiteral(ctx *parser.NumberLiteralContext) {
+func (r *ObjectListener) EnterNumberLiteral(ctx *parser.NumberLiteralContext) {
 	t := ctx.GetText()
+	r.text = t
 
 	if i := strings.IndexAny(t, ".eE"); i == -1 {
-		s.build(fmt.Sprintf("integer\n"))
+		r.tval = "integer"; r.print()
 		return
 	}
 
 	if _, err := strconv.ParseFloat(t, 64); err == nil {
-		s.build(fmt.Sprintf("float\n"))
+		r.tval = "float"; r.print()
 		return
 	}
 	panic("Invalid number: " + t)
 }
 
-func (s *ObjectListener) EnterObjectLiteral(ctx *parser.ObjectLiteralContext) {
-	s.build("\n")
+func (r *ObjectListener) EnterObjectLiteral(ctx *parser.ObjectLiteralContext) {
+	r.text = ctx.GetText()
+	r.tval = ""
+	r.print()
 }
 
-func (s *ObjectListener) EnterRelationLiteral(ctx *parser.RelationLiteralContext) {
-	s.relation = true
+func (r *ObjectListener) EnterRelationLiteral(ctx *parser.RelationLiteralContext) {
+	r.relation = true
 }
 
-func (s *ObjectListener) ExitRelationLiteral(ctx *parser.RelationLiteralContext) {
-	s.relation = false
+func (r *ObjectListener) ExitRelationLiteral(ctx *parser.RelationLiteralContext) {
+	r.relation = false
 }
 
-//
-//func (s *ObjectListener) EnterArrayLiteral(ctx *parser.ArrayLiteralContext) {
-//
-//	fmt.Printf("[] ")
-//}
-//
-//func (s *ObjectListener) EnterChannelLiteral(ctx *parser.ChannelLiteralContext) {
-//
-//	fmt.Printf("chan ")
-//	s.channel = true
-//}
-//
-//func (s *ObjectListener) ExitChannelLiteral(ctx *parser.ChannelLiteralContext) {
-//
-//	s.channel = false
-//}
+func (r *ObjectListener) EnterArrayLiteral(ctx *parser.ArrayLiteralContext) {
 
-func (s *ObjectListener) EnterBooleanLiteral(ctx *parser.BooleanLiteralContext) {
-	s.build(fmt.Sprintf("boolean\n"))
 }
 
-func (s *ObjectListener) EnterNullLiteral(ctx *parser.NullLiteralContext) {
-	s.build(fmt.Sprintf("null\n"))
+func (r *ObjectListener) EnterChannelLiteral(ctx *parser.ChannelLiteralContext) {
+
 }
 
-func NewObjectListener(file string) *ObjectListener {
-	name := path.Base(file)
-	return &ObjectListener{script: name}
+func (r *ObjectListener) EnterBooleanLiteral(ctx *parser.BooleanLiteralContext) {
+	r.text = ctx.GetText()
+	r.tval = "boolean"
+	r.print()
 }
 
+func (r *ObjectListener) EnterNullLiteral(ctx *parser.NullLiteralContext) {
+	r.text = ctx.GetText()
+	r.tval = "null"
+	r.print()
+}
+
+/**
+	type declaration
+ */
 type TypeListener struct {
 	*parser.BaseDHNTListener
+
+	file     *TargetFile
 
 	errors   []string
 
 	nested   int
-	typeword string
-	alias    string
+
+	name     string
+	tval     string
+	value    string
 
 	relation bool
 }
 
-func NewTypeListener(file string) *TypeListener {
-	return &TypeListener{}
+func NewTypeListener(file *TargetFile) *TypeListener {
+	return &TypeListener{file: file}
 }
 
-func (s *TypeListener) build(str string) {
-	if s.relation {
+func (r *TypeListener) print() {
+	if r.relation {
 		return
 	}
-	fmt.Print(str)
+	s := fmt.Sprintf("type %v = %v \t\t/* %v : %v */\n", encodeName(r.name), r.tval, r.name, r.value)
+	if r.nested > 1 {
+		s = fmt.Sprintf("%v %v \t\t/* %v : %v */\n", encodeName(r.name), r.tval, r.name, r.value)
+	}
+	r.file.write(s)
 }
 
-func (s *TypeListener) EnterObjectMembers(ctx *parser.ObjectMembersContext) {
-	s.typeword = "type"
-	s.alias = "="
-
-	if s.nested > 0 {
-		fmt.Printf("struct {\n")
-		s.typeword = ""
-		s.alias = ""
+func (r *TypeListener) EnterObjectMembers(ctx *parser.ObjectMembersContext) {
+	if r.nested > 0 {
+		r.tval = "struct {"
+		r.value = ctx.GetText()
+		r.print()
 	}
 
-	s.nested ++
+	r.nested ++
 }
 
-func (s *TypeListener) ExitObjectMembers(ctx *parser.ObjectMembersContext) {
-	s.nested --
+func (r *TypeListener) ExitObjectMembers(ctx *parser.ObjectMembersContext) {
+	r.nested --
 
-	s.typeword = "type"
-	s.alias = "="
-
-	if s.nested > 0 {
-		fmt.Printf("\n}\n")
+	if r.nested > 0 {
+		r.file.write("\n}\n")
 	}
 }
 
-func (s *TypeListener) EnterPair(ctx *parser.PairContext) {
-	//t := ctx.GetChild(i).(type)
-	switch ctx.GetChild(2).(type) {
-	case *parser.NameContext:
-	case *parser.ValueContext:
-		switch ctx.GetChild(2).(type) {
-		case *parser.NameContext:
-			s.relation = true
-		}
-	}
-
-	fmt.Printf("enter pair: %v \n", s.relation)
+func (r *TypeListener) EnterName(ctx *parser.NameContext) {
+	r.name = ctx.GetText()
 }
 
-func (s *TypeListener) ExitPair(ctx *parser.PairContext) {
-	switch ctx.GetChild(2).(type) {
-	case *parser.NameContext:
-	case *parser.RelationLiteralContext:
-		s.relation = false
-	}
-
-	fmt.Printf("exit pair: %v \n", s.relation)
+func (r *TypeListener) EnterStringLiteral(ctx *parser.StringLiteralContext) {
+	r.value = ctx.GetText()
+	r.tval = "string"
+	r.print()
 }
 
-func (s *TypeListener) EnterName(ctx *parser.NameContext) {
-	s.build(fmt.Sprintf("%v %v %v ", s.typeword, encodeName(ctx.GetText()), s.alias))
+func (r *TypeListener) EnterIdentifierLiteral(ctx *parser.IdentifierLiteralContext) {
+	r.value = ctx.GetText()
+	r.tval = encodeName(ctx.GetText())
+	r.print()
 }
 
-func (s *TypeListener) EnterStringLiteral(ctx *parser.StringLiteralContext) {
-	s.build("string\n")
-}
-
-func (s *TypeListener) EnterIdLiteral(ctx *parser.IdentifierLiteralContext) {
-	s.build("id\n")
-}
-
-func (s *TypeListener) EnterNumberLiteral(ctx *parser.NumberLiteralContext) {
+func (r *TypeListener) EnterNumberLiteral(ctx *parser.NumberLiteralContext) {
 	t := ctx.GetText()
+	r.value = t
 
 	if i := strings.IndexAny(t, ".eE"); i == -1 {
-		s.build("integer\n")
+		r.tval = "integer"
+		r.print()
 		return
 	}
 
 	if _, err := strconv.ParseFloat(t, 64); err == nil {
-		s.build("float\n")
+		r.tval = "float"
+		r.print()
 		return
 	}
 	panic("Invalid number: " + t)
 }
 
-func (s *TypeListener) EnterBooleanLiteral(ctx *parser.BooleanLiteralContext) {
-	s.build("boolean\n")
+func (r *TypeListener) EnterBooleanLiteral(ctx *parser.BooleanLiteralContext) {
+	r.value = ctx.GetText()
+	r.tval = "boolean"
+	r.print()
 }
 
-func (s *TypeListener) EnterNullLiteral(ctx *parser.NullLiteralContext) {
-	s.build("null\n")
+func (r *TypeListener) EnterNullLiteral(ctx *parser.NullLiteralContext) {
+	r.value = ctx.GetText()
+	r.tval = "null"
+	r.print()
 }
 
-//
-//func (s *TypeListener) EnterRelationLiteral(ctx *parser.RelationLiteralContext) {
-//	s.relation = true
-//}
-//
-//func (s *TypeListener) ExitRelationLiteral(ctx *parser.RelationLiteralContext) {
-//	s.relation = false
-//}
+func (r *TypeListener) EnterRelationLiteral(ctx *parser.RelationLiteralContext) {
+	r.relation = true
+}
+
+func (r *TypeListener) ExitRelationLiteral(ctx *parser.RelationLiteralContext) {
+	r.relation = false
+}

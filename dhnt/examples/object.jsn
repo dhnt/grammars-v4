@@ -11,22 +11,28 @@
     "int exp": 0e1,
     "int frac exp": 0.1e2,
     object: {
-        id: string,
+        str: string,
         status: boolean,
-        nested: {
+        nest1: {
             bool: true,
             float: 0.0,
+            nest2: {
+                null: 0a,
+            }
         }
     },
-    /*array: [] int, */
+    /* array: [] int, */
     /* channel: <1> float, */
     boolean: 0b,
     "boolean": 1b,
     true: 1b,
     false: 0b,
     null: 0a,
+    id: boolean,
+
     func: (param1 :string, param2 :int) result:int {
         print(obj);
+        print("obj");
     },
    /* main: (args :[]string) {
         obj := {} object

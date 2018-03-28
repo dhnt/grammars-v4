@@ -107,8 +107,8 @@ script
     ;
 
 object
-    : '{' members '}'                                 # ObjectMembers
-    | '{' '}' kind?                                   # ObjectKind
+    : '{' members '}' class?                          # ObjectMembers
+    | '{' '}' class?                                  # ObjectKind
     ;
 
 array
@@ -117,7 +117,7 @@ array
     ;
 
 relation
-    : '(' parameters? ')' results? block               # RelationParameters
+    : '(' parameters? ')' results? block               # RelationBlock
     | '(' '@' expression ')'                           # RelationAlias
     ;
 
@@ -142,8 +142,8 @@ results
     ;
 
 arguments
-     : expression (',' expression )* ','?
-     ;
+    : expression (',' expression )* ','?
+    ;
 
 pair
     : name ':' value
@@ -167,9 +167,13 @@ name
     | IDENTIFIER
     ;
 
+class
+    : name
+    ;
+
 kind
     : name
-    | '{' '}' kind?
+    | '{' '}' class?
     | '[' ']' kind?
     | '<' '>' kind?
     | '(' parameters? ')' results? '{' '}'

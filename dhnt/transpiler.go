@@ -6,7 +6,7 @@ import (
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 	"path"
 	"time"
-	"os"
+	"strings"
 )
 
 type Kind int
@@ -24,16 +24,6 @@ const (
 	Null
 )
 
-type Pair struct {
-	name      string
-	value     string
-	assertion string
-}
-
-func NewPair(name, value, assertion string) *Pair {
-	return &Pair{name: name, value: value, assertion: assertion}
-}
-
 type CompilationErrorListener struct {
 	*antlr.DiagnosticErrorListener
 }
@@ -46,11 +36,9 @@ func (d *CompilationErrorListener) ReportContextSensitivity(recognizer antlr.Par
 
 }
 
-func Compile(source string) error {
-	cwd, _ := os.Getwd()
-	file := path.Join(cwd, "/examples/", source)
-
-	fs, err := antlr.NewFileStream(file)
+//source_file target_folder
+func Compile(source string, target string) error {
+	fs, err := antlr.NewFileStream(source)
 	if err != nil {
 		fmt.Print(err)
 		//os.Exit(1)
@@ -74,7 +62,7 @@ func Compile(source string) error {
 	p.AddErrorListener(el)
 
 	//
-	namespace := path.Base(file)
+	namespace := path.Base(source)
 
 	tree := p.Script()
 
@@ -82,19 +70,28 @@ func Compile(source string) error {
 	elapsed := end.Sub(start)
 	fmt.Printf("Time taken to load: %v\n\n", elapsed)
 
-	buildObject(namespace, tree)
+	//
+	pkg := "out"
+	genLib(path.Join(target, "lib.go"), pkg)
 
-	buildType(namespace, tree)
+	sa := strings.Split(namespace, ".")
+	outfile := NewTargetFile(path.Join(target, sa[0] + ".go"), pkg, nil)
 
-	//buildObject(namespace, tree)
+	buildObject(outfile, namespace, tree)
+
+	buildType(outfile, tree)
+
+	buildFunc(outfile, tree)
+
+	outfile.close()
 
 	return nil
 }
 
-func buildObject(namespace string, tree antlr.Tree) {
+func buildObject(file *TargetFile, namespace string, tree antlr.Tree) {
 	start := time.Now()
 
-	l := NewObjectListener(namespace)
+	l := NewObjectListener(file, namespace)
 
 	antlr.ParseTreeWalkerDefault.Walk(l, tree)
 
@@ -107,16 +104,32 @@ func buildObject(namespace string, tree antlr.Tree) {
 	fmt.Printf("Time to build: %v\n\n", elapsed)
 }
 
-func buildType(namespace string, tree antlr.Tree) {
+func buildType(file *TargetFile, tree antlr.Tree) {
 	start := time.Now()
 
-	l := NewTypeListener(namespace)
+	l := NewTypeListener(file)
 
 	antlr.ParseTreeWalkerDefault.Walk(l, tree)
 
-	//if len(l.errors) > 0 {
-	//	fmt.Printf("Errors: %v", l.errors)
-	//}
+	if len(l.errors) > 0 {
+		fmt.Printf("Errors: %v", l.errors)
+	}
+
+	end := time.Now()
+	elapsed := end.Sub(start)
+	fmt.Printf("Time to build: %v\n\n", elapsed)
+}
+
+func buildFunc(file *TargetFile, tree antlr.Tree) {
+	start := time.Now()
+
+	l := NewFuncListener(file)
+
+	antlr.ParseTreeWalkerDefault.Walk(l, tree)
+
+	if len(l.errors) > 0 {
+		fmt.Printf("Errors: %v", l.errors)
+	}
 
 	end := time.Now()
 	elapsed := end.Sub(start)
